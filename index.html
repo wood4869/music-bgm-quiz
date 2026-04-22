@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>你的灵魂深处的 BGM 是什么？</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a25;
+            --accent-gold: #d4af37;
+            --accent-rose: #c9a9a9;
+            --accent-teal: #7dd3c0;
+            --accent-purple: #9d8dd4;
+            --text-primary: #f5f5f0;
+            --text-secondary: #a8a8b0;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-6: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --gradient-7: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            --gradient-8: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 背景动画 */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
+        }
+
+        .music-note {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.1;
+            animation: float 20s infinite;
+            color: var(--accent-gold);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+            50% { transform: scale(1.1) rotate(5deg); opacity: 0.8; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.1; }
+            90% { opacity: 0.1; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 开场页面 */
+        .intro-screen {
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .intro-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-rose) 50%, var(--accent-teal) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+
+        .intro-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .vinyl-icon {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 40px;
+            position: relative;
+            animation: spin 10s linear infinite;
+        }
+
+        .vinyl-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid var(--accent-gold);
+        }
+
+        .vinyl-circle:nth-child(1) { width: 100%; height: 100%; top: 0; left: 0; }
+        .vinyl-circle:nth-child(2) { width: 70%; height: 70%; top: 15%; left: 15%; border-color: var(--accent-rose); }
+        .vinyl-circle:nth-child(3) { width: 40%; height: 40%; top: 30%; left: 30%; border-color: var(--accent-teal); }
+        .vinyl-circle:nth-child(4) { width: 15%; height: 15%; top: 42.5%; left: 42.5%; background: var(--accent-gold); }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .start-btn {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 18px 60px;
+            font-size: 1.2rem;
+            font-family: 'Noto Serif SC', serif;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.6);
+        }
+
+        .start-btn:hover::before {
+            left: 100%;
+        }
+
+        /* 测试页面 */
+        .quiz-screen {
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--bg-card);
+            border-radius: 2px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        .question-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .question-number {
+            font-size: 0.9rem;
+            color: var(--accent-gold);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            background: var(--bg-secondary);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1rem;
+            color: var(--text-primary);
+            text-align: left;
+        }
+
+        .option:hover {
+            border-color: var(--accent-gold);
+            background: rgba(212, 175, 55, 0.05);
+            transform: translateX(10px);
+        }
+
+        .option.selected {
+            border-color: var(--accent-gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .option-letter {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            text-align: center;
+            line-height: 26px;
+            margin-right: 15px;
+            font-weight: 600;
+        }
+
+        .next-btn {
+            background: var(--gradient-2);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1.1rem;
+            font-family: 'Noto Serif SC', serif;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(240, 147, 251, 0.4);
+            float: right;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(240, 147, 251, 0.6);
+        }
+
+        .next-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 结果页面 */
+        .result-screen {
+            display: none;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .result-card {
+            background: var(--bg-card);
+            border-radius: 30px;
+            padding: 60px 40px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient-1);
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.3;
+        }
+
+        .result-description {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .result-playlist {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .result-playlist h3 {
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+        }
+
+        .playlist-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        .playlist-item:last-child {
+            border-bottom: none;
+        }
+
+        .share-section {
+            margin-top: 40px;
+        }
+
+        .share-btn {
+            background: var(--gradient-3);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-family: 'Noto Serif SC', serif;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .restart-btn {
+            background: transparent;
+            color: var(--accent-gold);
+            border: 2px solid var(--accent-gold);
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-family: 'Noto Serif SC', serif;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .restart-btn:hover {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+        }
+
+        /* 音乐类型特定样式 */
+        .type-rock { --result-gradient: var(--gradient-2); }
+        .type-classical { --result-gradient: var(--gradient-1); }
+        .type-electronic { --result-gradient: var(--gradient-3); }
+        .type-jazz { --result-gradient: var(--gradient-4); }
+        .type-pop { --result-gradient: var(--gradient-5); }
+        .type-indie { --result-gradient: var(--gradient-6); }
+        .type-rnb { --result-gradient: var(--gradient-7); }
+        .type-folk { --result-gradient: var(--gradient-8); }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .question-card {
+                padding: 25px 20px;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .result-card {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation" id="bgAnimation"></div>
+    
+    <div class="container">
+        <!-- 开场页面 -->
+        <div class="intro-screen" id="introScreen">
+            <div class="vinyl-icon">
+                <div class="vinyl-circle"></div>
+                <div class="vinyl-circle"></div>
+                <div class="vinyl-circle"></div>
+                <div class="vinyl-circle"></div>
+            </div>
+            
+            <h1 class="intro-title">你的灵魂深处的 BGM 是什么？</h1>
+            
+            <p class="intro-subtitle">
+                通过 15 道关于性格与偏好的问题<br>
+                探索你内心深处的音乐本质<br>
+                发现属于你的灵魂旋律
+            </p>
+            
+            <button class="start-btn" onclick="startQuiz()">开始测试</button>
+        </div>
+
+        <!-- 测试页面 -->
+        <div class="quiz-screen" id="quizScreen">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-number" id="questionNumber">问题 1 / 15</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options" id="options"></div>
+            </div>
+            
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()" disabled>下一题</button>
+            <div style="clear: both;"></div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div class="result-screen" id="resultScreen">
+            <div class="result-card">
+                <div class="result-label">你的灵魂 BGM 是</div>
+                <h2 class="result-title" id="resultTitle"></h2>
+                <p class="result-description" id="resultDescription"></p>
+                
+                <div class="result-playlist">
+                    <h3>🎵 推荐歌单</h3>
+                    <div id="playlist"></div>
+                </div>
+                
+                <div class="share-section">
+                    <button class="share-btn" onclick="shareResult()">分享结果</button>
+                    <button class="restart-btn" onclick="restartQuiz()">重新测试</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 背景音乐音符动画
+        function createMusicNotes() {
+            const notes = ['♪', '♫', '♬', '♩'];
+            const bg = document.getElementById('bgAnimation');
+            
+            for (let i = 0; i < 15; i++) {
+                const note = document.createElement('div');
+                note.className = 'music-note';
+                note.textContent = notes[Math.floor(Math.random() * notes.length)];
+                note.style.left = Math.random() * 100 + '%';
+                note.style.animationDelay = Math.random() * 20 + 's';
+                note.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                bg.appendChild(note);
+            }
+        }
+        
+        createMusicNotes();
+
+        // 测试题目
+        const questions = [
+            {
+                text: "周末的早晨，你更倾向于如何度过？",
+                options: [
+                    { text: "睡到自然醒，然后宅在家里", type: "pop" },
+                    { text: "去户外爬山或运动", type: "rock" },
+                    { text: "泡一杯咖啡，读一本书", type: "classical" },
+                    { text: "探索城市里没去过的小店", type: "indie" }
+                ]
+            },
+            {
+                text: "朋友聚会时，你通常是？",
+                options: [
+                    { text: "活跃气氛的那个", type: "pop" },
+                    { text: "安静倾听的那个", type: "classical" },
+                    { text: "提出新奇想法的那个", type: "electronic" },
+                    { text: "组织活动的那个", type: "rock" }
+                ]
+            },
+            {
+                text: "面对压力，你的应对方式是？",
+                options: [
+                    { text: "找朋友倾诉或发泄", type: "rock" },
+                    { text: "独自消化，慢慢调整", type: "folk" },
+                    { text: "用工作或爱好转移注意力", type: "electronic" },
+                    { text: "理性分析问题，制定计划", type: "classical" }
+                ]
+            },
+            {
+                text: "你理想中的旅行是？",
+                options: [
+                    { text: "热门景点打卡，热闹有趣", type: "pop" },
+                    { text: "冒险探索，挑战自我", type: "rock" },
+                    { text: "文化之旅，感受历史", type: "classical" },
+                    { text: "小众目的地，独特体验", type: "indie" }
+                ]
+            },
+            {
+                text: "选择衣服时，你更注重？",
+                options: [
+                    { text: "时尚潮流，好看就行", type: "pop" },
+                    { text: "舒适自在，不拘束", type: "folk" },
+                    { text: "个性独特，有辨识度", type: "indie" },
+                    { text: "品质经典，永不过时", type: "classical" }
+                ]
+            },
+            {
+                text: "看电影时，你偏好哪种类型？",
+                options: [
+                    { text: "轻松喜剧或爱情片", type: "pop" },
+                    { text: "动作片或科幻大片", type: "rock" },
+                    { text: "文艺片或纪录片", type: "indie" },
+                    { text: "经典老电影", type: "jazz" }
+                ]
+            },
+            {
+                text: "你如何看待规则？",
+                options: [
+                    { text: "规则就是用来打破的", type: "rock" },
+                    { text: "遵守规则，社会才能运转", type: "classical" },
+                    { text: "在规则内寻找自由", type: "jazz" },
+                    { text: "规则？我自有我的一套", type: "indie" }
+                ]
+            },
+            {
+                text: "深夜时分，你常常在想什么？",
+                options: [
+                    { text: "明天的计划和安排", type: "electronic" },
+                    { text: "人生的意义和哲理", type: "folk" },
+                    { text: "回忆过去的美好时光", type: "jazz" },
+                    { text: "创意和灵感", type: "indie" }
+                ]
+            },
+            {
+                text: "你更喜欢哪种社交方式？",
+                options: [
+                    { text: "大型派对，认识新朋友", type: "electronic" },
+                    { text: "小圈子聚会，深度交流", type: "jazz" },
+                    { text: "一对一聊天", type: "folk" },
+                    { text: "线上社交，轻松自在", type: "pop" }
+                ]
+            },
+            {
+                text: "工作中，你的风格是？",
+                options: [
+                    { text: "高效执行，结果导向", type: "electronic" },
+                    { text: "追求完美，注重细节", type: "classical" },
+                    { text: "灵活应变，随机发挥", type: "jazz" },
+                    { text: "按部就班，稳扎稳打", type: "folk" }
+                ]
+            },
+            {
+                text: "你如何表达自己的情感？",
+                options: [
+                    { text: "直接热烈，不掩饰", type: "rock" },
+                    { text: "含蓄内敛，需要品味", type: "classical" },
+                    { text: "通过艺术或创作", type: "indie" },
+                    { text: "轻松幽默，化解尴尬", type: "pop" }
+                ]
+            },
+            {
+                text: "对于新鲜事物，你的态度是？",
+                options: [
+                    { text: "迫不及待想要尝试", type: "electronic" },
+                    { text: "观望一下，再决定", type: "folk" },
+                    { text: "只选择感兴趣的", type: "indie" },
+                    { text: "更相信经典和传统", type: "jazz" }
+                ]
+            },
+            {
+                text: "你心中的浪漫是？",
+                options: [
+                    { text: "轰轰烈烈的爱情", type: "rock" },
+                    { text: "细水长流的陪伴", type: "folk" },
+                    { text: "充满惊喜的邂逅", type: "jazz" },
+                    { text: "独特难忘的体验", type: "indie" }
+                ]
+            },
+            {
+                text: "如果可以用一种颜色代表自己，你会选？",
+                options: [
+                    { text: "红色 - 热情奔放", type: "rock" },
+                    { text: "蓝色 - 沉静深邃", type: "classical" },
+                    { text: "紫色 - 神秘独特", type: "indie" },
+                    { text: "金色 - 温暖明亮", type: "pop" }
+                ]
+            },
+            {
+                text: "最后，你认为音乐对你的意义是？",
+                options: [
+                    { text: "发泄情绪的出口", type: "rock" },
+                    { text: "心灵的慰藉", type: "folk" },
+                    { text: "灵感的源泉", type: "electronic" },
+                    { text: "生活的背景音乐", type: "pop" }
+                ]
+            }
+        ];
+
+        // 结果类型
+        const results = {
+            rock: {
+                title: "🎸 放荡不羁的摇滚",
+                description: "你的灵魂里住着一个自由的摇滚手。你热情奔放，敢于打破常规，追求真实与自我。生活中你充满激情，不畏惧表达自己，即使这意味着要站在大多数人的对立面。你的 BGM 是电吉他的嘶吼和鼓点的震撼，永远充满力量与反叛。",
+                playlist: [
+                    "《Bohemian Rhapsody》- Queen",
+                    "《Sweet Child O' Mine》- Guns N' Roses",
+                    "《Don't Look Back in Anger》- Oasis",
+                    "《公路之歌》- 痛仰乐队",
+                    "《无地自容》- 黑豹乐队"
+                ]
+            },
+            classical: {
+                title: "🎹 优雅深邃的古典",
+                description: "你的灵魂如同一首精致的古典乐章。你沉静内敛，追求完美与秩序，有着深厚的内涵和修养。在喧嚣的世界里，你保持着一份独特的优雅与从容。你的 BGM 是钢琴的流淌和弦乐的悠扬，每一个音符都经过精心雕琢。",
+                playlist: [
+                    "《月光奏鸣曲》- 贝多芬",
+                    "《G 弦上的咏叹调》- 巴赫",
+                    "《四季 - 春》- 维瓦尔第",
+                    "《梁祝》- 何占豪/陈钢",
+                    "《茉莉花》- 中国民歌改编"
+                ]
+            },
+            electronic: {
+                title: "🎧 前卫潮流的电子",
+                description: "你的灵魂闪烁着未来的光芒。你充满好奇心，拥抱变化，总是走在时代的前沿。你对新鲜事物有着敏锐的嗅觉，喜欢探索未知的可能性。你的 BGM 是合成器的律动和电子节拍，充满科技感与无限想象。",
+                playlist: [
+                    "《Strobe》- deadmau5",
+                    "《Levels》- Avicii",
+                    "《Midnight City》- M83",
+                    "《The Spectre》- Alan Walker",
+                    "《Fade》- Alan Walker"
+                ]
+            },
+            jazz: {
+                title: "🎷 随性洒脱的爵士",
+                description: "你的灵魂像深夜的爵士酒吧一样迷人。你懂得享受生活，随性而不随意，有着独特的品味和情调。在复杂的世界里，你找到了属于自己的节奏。你的 BGM 是萨克斯的慵懒和钢琴的即兴，充满魅力与韵味。",
+                playlist: [
+                    "《Take Five》- Dave Brubeck",
+                    "《Fly Me to the Moon》- Frank Sinatra",
+                    "《What a Wonderful World》- Louis Armstrong",
+                    "《夜来香》- 邓丽君",
+                    "《玫瑰玫瑰我爱你》- 姚莉"
+                ]
+            },
+            pop: {
+                title: "🎤 阳光开朗的流行",
+                description: "你的灵魂是一首朗朗上口的流行歌。你乐观开朗，善于与人相处，总是能给身边的人带来快乐。你热爱生活，享受当下的每一刻。你的 BGM 是轻快的旋律和温暖的歌词，简单却充满力量。",
+                playlist: [
+                    "《Shape of You》- Ed Sheeran",
+                    "《Blinding Lights》- The Weeknd",
+                    "《告白气球》- 周杰伦",
+                    "《小幸运》- 田馥甄",
+                    "《起风了》- 买辣椒也用券"
+                ]
+            },
+            indie: {
+                title: "🎻 独特小众的独立",
+                description: "你的灵魂是一首不被大众熟知的独立音乐。你有着独特的审美和见解，不随波逐流，坚持做真实的自己。你享受独处，也珍惜志同道合的朋友。你的 BGM 是原声吉他的呢喃和独特的编曲，充满个性与温度。",
+                playlist: [
+                    "《Creep》- Radiohead",
+                    "《500 Miles》- The Proclaimers",
+                    "《南方姑娘》- 赵雷",
+                    "《成都》- 赵雷",
+                    "《理想三旬》- 陈鸿宇"
+                ]
+            },
+            folk: {
+                title: "🎼 温暖质朴的民谣",
+                description: "你的灵魂是一首质朴的民谣。你真诚善良，珍视简单的美好，有着温暖人心的力量。你向往自由，也懂得珍惜身边的人和事。你的 BGM 是吉他的弹唱和诗意的歌词，平淡中见真情。",
+                playlist: [
+                    "《Blowin' in the Wind》- Bob Dylan",
+                    "《Country Roads》- John Denver",
+                    "《平凡之路》- 朴树",
+                    "《那些花儿》- 朴树",
+                    "《春风十里》- 鹿先森乐队"
+                ]
+            },
+            rnb: {
+                title: "🎵 深情款款的 R&B",
+                description: "你的灵魂充满感性的节奏。你情感丰富，懂得爱与被爱，有着细腻的感受力。你享受浪漫，也愿意为在乎的人付出真心。你的 BGM 是转音的丝滑和节奏的摇摆，充满情感与律动。",
+                playlist: [
+                    "《We Belong Together》- Mariah Carey",
+                    "《Crazy in Love》- Beyoncé",
+                    "《爱很简单》- 陶喆",
+                    "《普通朋友》- 陶喆",
+                    "《红色高跟鞋》- 蔡健雅"
+                ]
+            }
+        };
+
+        let currentQuestion = 0;
+        let scores = {
+            rock: 0,
+            classical: 0,
+            electronic: 0,
+            jazz: 0,
+            pop: 0,
+            indie: 0,
+            folk: 0,
+            rnb: 0
+        };
+        let selectedOption = null;
+
+        function startQuiz() {
+            document.getElementById('introScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'block';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `问题 ${currentQuestion + 1} / ${questions.length}`;
+            document.getElementById('questionText').textContent = question.text;
+            
+            const optionsHtml = question.options.map((opt, index) => `
+                <div class="option" onclick="selectOption(${index})">
+                    <span class="option-letter">${String.fromCharCode(65 + index)}</span>
+                    ${opt.text}
+                </div>
+            `).join('');
+            
+            document.getElementById('options').innerHTML = optionsHtml;
+            document.getElementById('nextBtn').disabled = true;
+            selectedOption = null;
+            
+            // 更新进度条
+            const progress = ((currentQuestion) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function selectOption(index) {
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.remove('selected');
+                if (i === index) {
+                    opt.classList.add('selected');
+                }
+            });
+            
+            selectedOption = questions[currentQuestion].options[index];
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (selectedOption) {
+                scores[selectedOption.type]++;
+            }
+            
+            currentQuestion++;
+            
+            if (currentQuestion >= questions.length) {
+                showResult();
+            } else {
+                showQuestion();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('quizScreen').style.display = 'none';
+            document.getElementById('resultScreen').style.display = 'block';
+            
+            // 计算最高分类型
+            let maxScore = 0;
+            let resultType = 'pop';
+            
+            for (const [type, score] of Object.entries(scores)) {
+                if (score > maxScore) {
+                    maxScore = score;
+                    resultType = type;
+                }
+            }
+            
+            const result = results[resultType];
+            document.getElementById('resultTitle').textContent = result.title;
+            document.getElementById('resultDescription').textContent = result.description;
+            
+            const playlistHtml = result.playlist.map(song => 
+                `<div class="playlist-item">${song}</div>`
+            ).join('');
+            document.getElementById('playlist').innerHTML = playlistHtml;
+            
+            // 设置结果卡片样式
+            document.querySelector('.result-card').className = `result-card type-${resultType}`;
+        }
+
+        function shareResult() {
+            const resultTitle = document.getElementById('resultTitle').textContent;
+            const shareText = `我的灵魂 BGM 是：${resultTitle}\n\n来测测你的吧！`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '灵魂 BGM 测试',
+                    text: shareText,
+                    url: window.location.href
+                });
+            } else {
+                // 复制到剪贴板
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('结果已复制到剪贴板！');
+                });
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            scores = {
+                rock: 0,
+                classical: 0,
+                electronic: 0,
+                jazz: 0,
+                pop: 0,
+                indie: 0,
+                folk: 0,
+                rnb: 0
+            };
+            
+            document.getElementById('resultScreen').style.display = 'none';
+            document.getElementById('introScreen').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
